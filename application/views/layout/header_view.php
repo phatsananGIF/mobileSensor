@@ -3,8 +3,9 @@
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
   <meta name="description" content="">
   <meta name="author" content="">
   <title>ปากพนังบน</title>
@@ -26,23 +27,34 @@
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
+
+<?php 
+
+$query = (" SELECT * FROM ss_sites WHERE sitecode != 'PPN07' ORDER BY lined ASC "); 
+$querySite = $this->db->query($query);
+$querySite = $querySite->result_array();
+
+
+?>
+
+
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="<?=base_url()?>home">ปากพนังบน</a>
+    <a class="navbar-brand" href="<?=site_url()?>home">ปากพนังบน</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="ข้อมูลโดยรวม">
-          <a class="nav-link" href="<?=base_url()?>home">
+          <a class="nav-link" href="<?=site_url()?>home">
             <i class="fa fa-fw fa-area-chart"></i>
             <span class="nav-link-text">ข้อมูลโดยรวม</span>
           </a>
         </li>
         
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="ระบบสื่อสาร">
-          <a class="nav-link" href="<?=base_url()?>Communications">
+          <a class="nav-link" href="<?=site_url()?>Communications">
             <i class="fa fa-fw fa-podcast"></i>
             <span class="nav-link-text">ระบบสื่อสาร</span>
           </a>
@@ -53,21 +65,13 @@
             <span class="nav-link-text">ระดับน้ำ</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
+
+          <?php foreach($querySite as $site){ ?>
             <li>
-              <a href="<?=base_url()?>waterlevel/ppn01">PPN01 เขื่อนห้วยน้ำใส</a>
+              <a href="<?=site_url()?>waterlevel/site/<?=$site['sitecode']?>"><?=$site['sitecode']." ".$site['sitename']?></a>
             </li>
-            <li>
-              <a href="<?=base_url()?>waterlevel/ppn02">PPN02 ฝายคลองไม้เสียบ</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>waterlevel/ppn04">PPN04 อำเภอชะอวด</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>waterlevel/ppn05">PPN05 บ้านท้ายทะเล</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>waterlevel/ppn06">PPN06 ปตร.คลองชะอวด-แพรกเมือง</a>
-            </li>
+          <?php } ?>
+          
           </ul>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="ปริมาณน้ำ">
@@ -76,21 +80,11 @@
             <span class="nav-link-text">ปริมาณน้ำ</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents2">
+
             <li>
-              <a href="<?=base_url()?>quantitywater/ppn01">PPN01 เขื่อนห้วยน้ำใส</a>
+              <a href="<?=site_url()?>quantitywater/site/<?=$querySite['0']['sitecode']?>"><?=$querySite['0']['sitecode']." ".$querySite['0']['sitename']?></a>
             </li>
-            <li>
-              <a href="<?=base_url()?>quantitywater/ppn02">PPN02 ฝายคลองไม้เสียบ</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>quantitywater/ppn04">PPN04 อำเภอชะอวด</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>quantitywater/ppn05">PPN05 บ้านท้ายทะเล</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>quantitywater/ppn06">PPN06 ปตร.คลองชะอวด-แพรกเมือง</a>
-            </li>
+
           </ul>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="ปริมาณน้ำฝน">
@@ -99,26 +93,18 @@
             <span class="nav-link-text">ปริมาณน้ำฝน</span>
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents3">
+
+          <?php foreach($querySite as $site){ ?>
             <li>
-              <a href="<?=base_url()?>rainfall/ppn01">PPN01 เขื่อนห้วยน้ำใส</a>
+              <a href="<?=site_url()?>rainfall/site/<?=$site['sitecode']?>"><?=$site['sitecode']." ".$site['sitename']?></a>
             </li>
-            <li>
-              <a href="<?=base_url()?>rainfall/ppn02">PPN02 ฝายคลองไม้เสียบ</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>rainfall/ppn04">PPN04 อำเภอชะอวด</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>rainfall/ppn05">PPN05 บ้านท้ายทะเล</a>
-            </li>
-            <li>
-              <a href="<?=base_url()?>rainfall/ppn06">PPN06 ปตร.คลองชะอวด-แพรกเมือง</a>
-            </li>
+          <?php } ?>
+          
           </ul>
         </li>
   
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="ภาพนิ่ง">
-          <a class="nav-link" href="<?=base_url()?>slideImage">
+          <a class="nav-link" href="<?=site_url()?>slideImage">
             <i class="fa fa-fw fa-file-image-o"></i>
             <span class="nav-link-text">ภาพนิ่ง</span>
           </a>

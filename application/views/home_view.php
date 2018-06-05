@@ -55,7 +55,7 @@ Highcharts.chart('waterlevel', {
     
 
     xAxis: {
-        categories: ['06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00','02:00','04:00','06:00']
+        type: 'datetime'
     },
 
     yAxis: {
@@ -68,36 +68,21 @@ Highcharts.chart('waterlevel', {
         verticalAlign: 'top'
     },
 
+    tooltip: {
+        headerFormat: '<span><b>{point.key}</b></span> <br/>',
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:.2f}</b></span> <br/>',
+        shared: true,
+        useHTML: true
+    },
     plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: false
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
         }
     },
 
-     series: [{
-        name: 'PPN01 เขื่อนห้วยน้ำใส',
-        color:'#c80000',
-        data: [159,90,109,86,173,236,71,159,90,109,86,173,236,]
-    }, {
-        name: 'PPN02 ฝายคลองไม้เสียบ',
-        color:'#0057ae',
-        data: [119,80,110,95,180,210,65,140,80,111,75,126,220,]
-    }, {
-        name: 'PPN04 อำเภอชะอวด',
-        color:'#ffc107',
-        data: [129,70,120,96,133,222,56,130,70,120,65,172,210,]
-    }, {
-        name: 'PPN05 บ้านท้ายทะเล',
-        color:'#28a745',
-        data: [139,66,105,47,158,240,45,120,60,130,56,162,200,]
-    }, {
-        name: 'PPN06 ปตร.คลองชะอวด-แพรกเมือง',
-        color:'#17a2b8',
-        data: [109,50,111,67,165,215,40,110,50,140,55,153,230,]
-    }]
+    series: [<?= $series ?>]
+
 });//end chart waterlevel
 
 
@@ -112,7 +97,7 @@ Highcharts.chart('quantitywater', {
     },
 
     xAxis: {
-        categories: ['06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00','02:00','04:00','06:00']
+        type: 'datetime'
     },
 
     yAxis: {
@@ -125,36 +110,22 @@ Highcharts.chart('quantitywater', {
         verticalAlign: 'top'
     },
 
+    tooltip: {
+        headerFormat: '<span><b>{point.key}</b></span> <br/>',
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:.2f}</b></span> <br/>',
+        shared: true,
+        useHTML: true
+    },
     plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: false
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
         }
     },
 
-     series: [{
-        name: 'PPN01 เขื่อนห้วยน้ำใส',
-        color:'#c80000',
-        data: [159,90,109,86,173,236,71,159,90,109,86,173,236,]
-    }, {
-        name: 'PPN02 ฝายคลองไม้เสียบ',
-        color:'#0057ae',
-        data: [119,80,110,95,180,210,65,140,80,111,75,126,220,]
-    }, {
-        name: 'PPN04 อำเภอชะอวด',
-        color:'#ffc107',
-        data: [129,70,120,96,133,222,56,130,70,120,65,172,210,]
-    }, {
-        name: 'PPN05 บ้านท้ายทะเล',
-        color:'#28a745',
-        data: [139,66,105,47,158,240,45,120,60,130,56,162,200,]
-    }, {
-        name: 'PPN06 ปตร.คลองชะอวด-แพรกเมือง',
-        color:'#17a2b8',
-        data: [109,50,111,67,165,215,40,110,50,140,55,153,230,]
-    }]
+    series: [<?= $series ?>]
+
+
 });//end chart quantitywater
 
 
@@ -170,7 +141,7 @@ Highcharts.chart('rainfall', {
     },
 
     xAxis: {
-        categories: ['06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00','02:00','04:00','06:00']
+        type: 'datetime'
     },
 
     yAxis: {
@@ -183,36 +154,22 @@ Highcharts.chart('rainfall', {
         verticalAlign: 'top'
     },
 
+    tooltip: {
+        headerFormat: '<span><b>{point.key}</b></span> <br/>',
+        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:.2f}</b></span> <br/>',
+        shared: true,
+        useHTML: true
+    },
     plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: false
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
         }
     },
 
-     series: [{
-        name: 'PPN01 เขื่อนห้วยน้ำใส',
-        color:'#c80000',
-        data: [159,90,109,86,173,236,71,159,90,109,86,173,236,]
-    }, {
-        name: 'PPN02 ฝายคลองไม้เสียบ',
-        color:'#0057ae',
-        data: [119,80,110,95,180,210,65,140,80,111,75,126,220,]
-    }, {
-        name: 'PPN04 อำเภอชะอวด',
-        color:'#ffc107',
-        data: [129,70,120,96,133,222,56,130,70,120,65,172,210,]
-    }, {
-        name: 'PPN05 บ้านท้ายทะเล',
-        color:'#28a745',
-        data: [139,66,105,47,158,240,45,120,60,130,56,162,200,]
-    }, {
-        name: 'PPN06 ปตร.คลองชะอวด-แพรกเมือง',
-        color:'#17a2b8',
-        data: [109,50,111,67,165,215,40,110,50,140,55,153,230,]
-    }]
+    series: [<?= $series ?>]
+
+
 });//end chart rainfall
 
 </script>

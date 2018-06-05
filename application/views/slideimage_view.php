@@ -3,38 +3,34 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item active">ภาพนิ่ง</li>
       </ol>
-
-
       
       <div class="card mb-3">
         <div class="card-header">
-            <div class="input-group">
-
-                  <select class="form-control" id="selected_sitecode" >
-                      <option value="61" selected="selected">เขื่อนห้วยน้ำใส US</option>
-                      <option value="62">ฝายคลองไม้เสียบ US</option>
-                      <option value="63">ฝายคลองไม้เสียบ DS</option>
-                      <option value="64">อำเภอชะอวด US</option>
-                      <option value="65">บ้านท้ายทะเล US</option>
-                      <option value="66">ปตร.คลองชะอวด-แพรกเมือง US</option>
-                      <option value="67">ปตร.คลองชะอวด-แพรกเมือง DS</option>
-                  </select>
-
-                  <input type="text" id="datepicker" class="form-control"  />
-                  
-                  <button type="button" onclick="submit()" class="btn btn-default btn-sm " >Search</button>
-            </div>
-        </div>
-
-        <div class="card-body">
-          <div id="gallery" style="visibility:hidden">
-               
-          </div>
       
+            <div class="row">
 
-        </div>
-      </div>
+              <div class="col-xs-6 col-md-4">
+                  <select class="form-control" id="selected_sitecode" >
+                    <?php foreach($rsquery as $side){ ?>
+                      <option value="<?php echo  $side['devicesID'];?>"><?php echo  $side['sitename']." ".$side['location'];?></option>
+                    <?php } ?>
+                  </select>
+              </div>
+              
+              <div class="col-xs-6 col-md-4">
+                  <input type="text" id="datepicker" class="form-control"  />
+              </div>
+              <div class="col-xs-6 col-md-4">
+                  <button type="button" onclick="submit()" class="btn btn-primary " >Search</button>
+              </div>
 
+            </div><!-- row -->      
+            
+        </div><!-- card-header --> 
+
+      </div><!-- card mb-3 --> 
+
+      <div id="gallery" style="visibility:hidden"></div>
 
 </div>
 <!-- /.container-fluid-->

@@ -49,14 +49,24 @@
         xAxis: {
             type: 'datetime'
         },
-        yAxis: {
+
+        yAxis: [{
+            reversed: true,
             title: {
-                text: 'mm.'
+                text: 'ปริมาณน้ำฝน (มม.)'
             }
-        },
+        }, {
+            
+            opposite: true,
+            title: {
+                text: 'ปริมาณน้ำฝนสะสม (มม.)'
+            }
+        }],
+
         legend: {
             verticalAlign: 'top'
         },
+
         plotOptions: {
             area: {
                 fillColor: {

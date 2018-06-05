@@ -4,94 +4,67 @@
         <li class="breadcrumb-item active">ระบบสื่อสาร</li>
       </ol>
 
-      <!-- PPN01 เขื่อนห้วยน้ำใส -->
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-podcast"></i> PPN01 เขื่อนห้วยน้ำใส</div>
-        <div class="list-group list-group-flush small">
-          <div class="list-group-item" >
-            <div class="media">
-              <div class="media-body">
-                <div>เหนือน้ำระบบสื่อสาร <strong style="color: #04B404;">ปกติ</strong> </div>
-                <div>ระดับน้ำเก็บกัก <strong style="color: #ffa500;">สูง</strong> </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+  <div id="databox">
+  </div>
 
 
-      <!-- PPN02 ฝายคลองไม้เสียบ -->
-      <div class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-podcast"></i> PPN02 ฝายคลองไม้เสียบ</div>
-          <div class="list-group list-group-flush small">
-            <div class="list-group-item" >
-              <div class="media">
-                <div class="media-body">
-                  <div>เหนือน้ำระบบสื่อสาร <strong style="color: #FF0000;">ขัดข้อง</strong> </div>
-                  <div>ท้ายน้ำระบบสื่อสาร <strong style="color: #FF0000;">ขัดข้อง</strong> </div>
-                  <div>ปริมาณน้ำผ่านฝาย <strong style="color: #a52a2a;">ไม่มี</strong> </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      <!-- PPN04 อำเภอชะอวด -->
-      <div class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-podcast"></i> PPN04 อำเภอชะอวด</div>
-          <div class="list-group list-group-flush small">
-            <div class="list-group-item" >
-              <div class="media">
-                <div class="media-body">
-                  <div>เหนือน้ำระบบสื่อสาร <strong style="color: #04B404;">ปกติ</strong> </div>
-                  <div>ระดับน้ำ <strong style="color: #04B404;">ปกติ</strong> </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      <!-- PPN05 บ้านท้ายทะเล -->
-      <div class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-podcast"></i> PPN05 บ้านท้ายทะเล</div>
-          <div class="list-group list-group-flush small">
-            <div class="list-group-item" >
-              <div class="media">
-                <div class="media-body">
-                  <div>เหนือน้ำระบบสื่อสาร <strong style="color: #FF0000;">ขัดข้อง</strong> </div>
-                  <div>ระดับน้ำ <strong style="color: #04B404;">ปกติ</strong> </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      <!-- PPN06 ปตร.คลองชะอวด-แพรกเมือง -->
-      <div class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-podcast"></i> PPN06 ปตร.คลองชะอวด-แพรกเมือง</div>
-          <div class="list-group list-group-flush small">
-            <div class="list-group-item" >
-              <div class="media">
-                <div class="media-body">
-                  <div>เหนือน้ำระบบสื่อสาร <strong style="color: #04B404;">ปกติ</strong> </div>
-                  <div>ระดับน้ำ <strong style="color: #04B404;">ปกติ</strong> </div>
-                  <div>ท้ายน้ำระบบสื่อสาร <strong style="color: #FF0000;">ขัดข้อง</strong> </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        
+   
         
 
 </div>
 <!-- /.container-fluid-->
+
+
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    var sensorall = <?php echo json_encode($sensorall); ?>;
+
+    //--foreach--//
+    var sitecode = "";
+    sensorall.forEach(function(sensor){
+      console.log(sensor);
+
+      if(sensor.sitecode != sitecode){
+
+          var dataCourtStatus = '<div class="card mb-3">';
+              dataCourtStatus += '<div class="card-header">';
+              dataCourtStatus += '<i class="fa fa-podcast"></i> '+sensor.sitecode+' '+sensor.sitename+'</div>';
+              dataCourtStatus += '<div class="list-group list-group-flush small">';
+              dataCourtStatus += '<div class="list-group-item" >';
+              dataCourtStatus += '<div class="media">';
+              dataCourtStatus += '<div class="media-body" >';
+              dataCourtStatus += '<div id="'+sensor.sitecode+'">'+sensor.name_location+' '+sensor.network_label+' <strong style="color: '+sensor.network_color+';">'+sensor.network_level+'</strong> </div>';
+              dataCourtStatus += '<div id="'+sensor.sitecode+'WL">'+sensor.sensor_label+' '+sensor.sensor_cal+' <strong style="color: '+sensor.sensor_color+';">'+sensor.sensor_status+'</strong> <p>'+sensor.sensor_dt +'</p></div>';
+              dataCourtStatus += '</div>';
+              dataCourtStatus += '</div>';
+              dataCourtStatus += '</div>';
+              dataCourtStatus += '</div>';
+              dataCourtStatus += '</div>';
+              $(dataCourtStatus).appendTo("#databox");
+
+        sitecode=sensor.sitecode
+
+      }else{
+
+        $('<div>'+sensor.name_location+' '+sensor.network_label+' <strong style="color: '+sensor.network_color+';">'+sensor.network_level+'</strong></div>').appendTo("#"+sensor.sitecode+"");
+
+        if(sensor.sitecode != 'PPN06'){
+          $("#"+sensor.sitecode+"WL").html('<div>'+sensor.sensor_label+' '+sensor.sensor_cal+' <strong style="color: '+sensor.sensor_color+';">'+sensor.sensor_status+'</strong> <p>'+sensor.sensor_dt +'</p></div>');
+        }
+
+      }
+
+
+    }); //end foreach
+   
+
+
+
+  });// end document.ready
+  
+
+
+</script>
