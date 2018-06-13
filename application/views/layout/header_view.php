@@ -22,8 +22,14 @@
 
   <!-- Bootstrap core JavaScript-->
   <script src="<?=base_url()?>asset/vendor/jquery/jquery.min.js"></script>
-  
 
+  <!-- Include Required Prerequisites -->
+  <script type="text/javascript" src="<?=base_url()?>asset/vendor/DateRangePicker/moment.min.js"></script>
+
+  <!-- Include Date Range Picker -->
+  <script src="<?=base_url()?>asset/vendor/DateRangePicker/daterangepicker.js"></script>
+  <link href="<?=base_url()?>asset/vendor/DateRangePicker/daterangepicker.css" rel="stylesheet" type="text/css"/>
+  
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">

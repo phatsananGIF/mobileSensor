@@ -14,20 +14,10 @@
       </div>
 
 
-      <!-- Area Chart ปริมาณน้ำ-->
-      <div class="card mb-3">
-        <div class="card-header">
-          <i class="fa fa-industry"></i> ปริมาณน้ำ</div>
-        <div class="card-body">
-            <div id="quantitywater" style="width: 100%; height: 400px; margin-bottom: 20px; margin-top: 20px;"></div>
-        </div>
-      </div>
-
-
       <!-- Area Chart ปริมาณน้ำฝน-->
       <div class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-tint"></i> ปริมาณน้ำฝน</div>
+          <i class="fa fa-tint"></i> ปริมาณน้ำฝนสะสม</div>
         <div class="card-body">
             <div id="rainfall" style="width: 100%; height: 400px; margin-bottom: 20px; margin-top: 20px;"></div>
         </div>
@@ -55,7 +45,10 @@ Highcharts.chart('waterlevel', {
     
 
     xAxis: {
-        type: 'datetime'
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            day: '%Y-%m-%d'
+        }
     },
 
     yAxis: {
@@ -69,10 +62,10 @@ Highcharts.chart('waterlevel', {
     },
 
     tooltip: {
-        headerFormat: '<span><b>{point.key}</b></span> <br/>',
-        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:.2f}</b></span> <br/>',
         shared: true,
-        useHTML: true
+        xDateFormat: '%Y-%m-%d',
+        headerFormat: '<span>{point.key}</span> <br/>',
+        pointFormat: '<span style="color:{series.color}">{series.name}: {point.y:.2f}</span> <br/>'
     },
     plotOptions: {
         column: {
@@ -81,52 +74,10 @@ Highcharts.chart('waterlevel', {
         }
     },
 
-    series: [<?= $series ?>]
+    series: [<?= $seriesWL ?>]
 
 });//end chart waterlevel
 
-
-Highcharts.chart('quantitywater', {
-    chart: {
-        type: 'line',
-        zoomType: 'xy'
-    },
-
-    title: {
-        text: ''
-    },
-
-    xAxis: {
-        type: 'datetime'
-    },
-
-    yAxis: {
-        title: {
-            text: 'ลบ.ม./วินาที'
-        }
-    },
-
-    legend: {
-        verticalAlign: 'top'
-    },
-
-    tooltip: {
-        headerFormat: '<span><b>{point.key}</b></span> <br/>',
-        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:.2f}</b></span> <br/>',
-        shared: true,
-        useHTML: true
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-
-    series: [<?= $series ?>]
-
-
-});//end chart quantitywater
 
 
 
@@ -141,7 +92,10 @@ Highcharts.chart('rainfall', {
     },
 
     xAxis: {
-        type: 'datetime'
+        type: 'datetime',
+        dateTimeLabelFormats: {
+            day: '%Y-%m-%d'
+        }
     },
 
     yAxis: {
@@ -155,10 +109,10 @@ Highcharts.chart('rainfall', {
     },
 
     tooltip: {
-        headerFormat: '<span><b>{point.key}</b></span> <br/>',
-        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:.2f}</b></span> <br/>',
         shared: true,
-        useHTML: true
+        xDateFormat: '%Y-%m-%d',
+        headerFormat: '<span>{point.key}</span> <br/>',
+        pointFormat: '<span style="color:{series.color}">{series.name}: {point.y:.2f}</span> <br/>'
     },
     plotOptions: {
         column: {
@@ -167,7 +121,7 @@ Highcharts.chart('rainfall', {
         }
     },
 
-    series: [<?= $series ?>]
+    series: [<?= $seriesRQ ?>]
 
 
 });//end chart rainfall

@@ -7,39 +7,160 @@ class Home extends CI_Controller {
     
     public function index(){
 
+
+        $colorsite=array(
+            'PPN01US'=>'#00ff00',
+            'PPN01DS'=>'#00ffff',
+            'PPN02US'=>'#ffff00',
+            'PPN02DS'=>'#ff6600',
+            'PPN04US'=>'#ff3366',
+            'PPN04DS'=>'#ff66cc',
+            'PPN05US'=>'#999966',
+            'PPN05DS'=>'#007f7f',
+            'PPN06US'=>'#5656ff',
+            'PPN06DS'=>'#660033'
+        );
+
+        $typeWL=array(
+            'PPN01US'=>'ระดับน้ำ',
+            'PPN02US'=>'ระดับเหนือน้ำ',
+            'PPN02DS'=>'ระดับท้ายน้ำ',
+            'PPN04US'=>'ระดับน้ำ',
+            'PPN05US'=>'ระดับน้ำ',
+            'PPN06US'=>'ระดับเหนือน้ำ',
+            'PPN06DS'=>'ระดับท้ายน้ำ'
+        );
+
+        $date_start = date('Y-04-d H:i:s',strtotime(date('Y-04-d 00:00:00') . "- 7day"));	
+        $date_end = date('Y-04-d H:i:s');
+        $step=86400; //1hr=3600, 1day= 86400
+
         
-        $series="{
-            name: 'PPN01 เขื่อนห้วยน้ำใส',
-            color: '#c80000',
-            data: [[1525820400000,0.17],[1525821300000,1.11],[1525822200000,1.09],[1525823100000,1.11],[1525824000000,1.04],[1525824900000,0.01],[1525825800000,1.02],[1525826700000,0.04],[1525827600000,0.01],[1525828500000,0.03],]
-        },{
-            name: 'PPN02 ฝายคลองไม้เสียบ',
-            color: '#0057ae',
-            data: [[1525820400000,0.07],[1525821300000,0.11],[1525822200000,0.09],[1525823100000,0.11],[1525824000000,0.04],[1525824900000,-0.01],[1525825800000,0.02],[1525826700000,-0.04],[1525827600000,-0.01],[1525828500000,-0.03],]
-        },{
-            name: 'PPN04 อำเภอชะอวด',
-            color: '#ffc107',
-            data: [[1525820400000,2.07],[1525821300000,2.11],[1525822200000,2.09],[1525823100000,2.11],[1525824000000,2.04],[1525824900000,1.01],[1525825800000,1.02],[1525826700000,1.04],[1525827600000,1.01],[1525828500000,1.03],]
-        },{
-            name: 'PPN05 บ้านท้ายทะเล',
-            color: '#28a745',
-            data: [[1525820400000,3.07],[1525821300000,3.11],[1525822200000,3.09],[1525823100000,3.11],[1525824000000,3.04],[1525824900000,2.01],[1525825800000,2.02],[1525826700000,2.04],[1525827600000,2.01],[1525828500000,2.03],]
-        },{
-            name: 'PPN06 ปตร.คลองชะอวด-แพรกเมือง',
-            color: '#17a2b8',
-            data: [[1525820400000,4.07],[1525821300000,4.11],[1525822200000,4.09],[1525823100000,4.11],[1525824000000,4.04],[1525824900000,3.01],[1525825800000,3.02],[1525826700000,3.04],[1525827600000,3.01],[1525828500000,3.03],]
-        }";
+        // --query sites wl--//
+        $seriesWL = "";
+
+        $query = ("SELECT ss_devices.id as devicesID, siteid, location, sensor, sitecode, sitename 
+                    FROM ss_devices
+                    LEFT JOIN ss_sites ON ss_devices.siteid=ss_sites.id
+                    WHERE sensor='wl'
+                    ORDER BY ss_sites.lined ASC, ss_devices.location DESC"); 
+        $sites = $this->db->query($query);
+        $sites = $sites->result_array();
+
+        foreach($sites as $sitewl){
+            /*
+            $querysensorWL = (" SELECT * ,( avg(`sensor_value`) + avg(offset)) AS `cal_value`,
+                        from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) AS `dt`
+                        from `ss_sensor` where siteid = '".$sitewl['sitecode']."'  and sensor_type = '".$sitewl['sensor']."' and location='".$sitewl['location']."' and 
+                        from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) between '$date_start' and '$date_end'  
+                        group by (unix_timestamp(`sensor_dt`) DIV $step),`siteid`,`location`,`sensor_type`  ORDER BY `dt` asc  ");
+                        */
+
+            $querysensorWL = (" SELECT * ,( avg(`sensor_value`) + avg(offset)) AS `cal_value`
+                        from `ss_sensor` where siteid = '".$sitewl['sitecode']."' and sensor_type = '".$sitewl['sensor']."'and location='".$sitewl['location']."' and
+                        sensor_dt between '$date_start' and '$date_end' group by DATE_FORMAT(sensor_dt, '%Y-%m-%d')
+                        ORDER BY `sensor_dt` asc ");
+            $sitesensorWL = $this->db->query($querysensorWL);
+
+            if($sitesensorWL->num_rows()!=0){
+                $sitesensorWL = $sitesensorWL->result_array();
+                $val = "";
+                foreach($sitesensorWL as $lineWL){
+                    $mydate=getdate(strtotime($lineWL['sensor_dt']));
+                    $dt= "Date.UTC($mydate[year], $mydate[mon]-1, $mydate[mday])";
+                    $dataWL=number_format($lineWL['cal_value'],2);
+                    $val.="[".$dt.",".$dataWL."],";
+                }
+                $seriesWL.="{
+                    name: '".$typeWL[$sitewl['sitecode'].strtoupper($sitewl['location'])]." ".$sitewl['sitecode']." ".$sitewl['sitename']."',
+                    color: '".$colorsite[$sitewl['sitecode'].strtoupper($sitewl['location'])]."',
+                    data: [".$val."]
+                },";
+
+            }
+
+
+        }//end foreach WL
+        
+        //print_r($this->db->last_query());
 
 
 
+        // --query sites RQ--//
+        $seriesRQ = "";
+
+        $query = ("SELECT ss_devices.id as devicesID, siteid, location, sensor, sitecode, sitename 
+                    FROM ss_devices
+                    LEFT JOIN ss_sites ON ss_devices.siteid=ss_sites.id
+                    WHERE sensor='rq'
+                    ORDER BY ss_sites.lined ASC, ss_devices.location DESC"); 
+        $sites = $this->db->query($query);
+        $sites = $sites->result_array();
+
+        foreach($sites as $siteRQ){
+            /*
+            $querysensorRQ = (" SELECT * ,(sum(sensor_value) / 4) AS sum_value ,
+                                from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) AS `dt`
+                                from `ss_sensor` where siteid = '".$siteRQ['sitecode']."' and sensor_type = 'RQ'
+                                and from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) between  '$date_start' and '$date_end' 
+                                group by (unix_timestamp(`sensor_dt`) DIV $step),`siteid`,`location`,`sensor_type`  ORDER BY `dt` asc ");
+
+                                */
+
+                                
+            $querysensorRQ = (" SELECT * ,(sum(sensor_value) /4) AS sum_value FROM `ss_sensor`
+                                WHERE `sensor_type` = 'RQ'  and siteid = '".$siteRQ['sitecode']."'
+                                and sensor_dt between '$date_start' and '$date_end' 
+                                group by DATE_FORMAT(sensor_dt, '%Y-%m-%d')
+                                ORDER BY `sensor_dt` asc ");
+                                
+
+            $sitesensorRQ = $this->db->query($querysensorRQ);
+            
+            if($sitesensorRQ->num_rows()!=0){
+                $sitesensorRQ = $sitesensorRQ->result_array();
+                $val = "";
+                foreach($sitesensorRQ as $lineRQ){
+                    $mydate=getdate(strtotime($lineRQ['sensor_dt']));
+                    $dt= "Date.UTC($mydate[year], $mydate[mon]-1, $mydate[mday])";
+                    $us=number_format($lineRQ['sum_value'],2);
+                    $val.="[".$dt.",".$us."],";
+                }
+                $seriesRQ.="{
+                    name: '".$siteRQ['sitecode']." ".$siteRQ['sitename']."',
+                    color: '".$colorsite[$siteRQ['sitecode']."US"]."',
+                    data: [".$val."]
+                },";
+
+            }
 
 
-        $data['series'] = $series;
+        }//end foreach RQ
 
 
+
+        
+        //print_r($this->db->last_query());
+        /*
+        echo '<pre>';
+        print_r($sites);
+        echo  '</pre>';
+        */
+        
+        
+        
+        
+        $data['series'] = "";
+        $data['seriesWL'] = $seriesWL;
+        $data['seriesRQ'] = $seriesRQ;
+
+
+        
         $this->load->view('layout/header_view');
         $this->load->view('home_view',$data);
         $this->load->view('layout/footer_view');
+        
+        
 
     }// fn.index
 

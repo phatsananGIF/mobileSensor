@@ -26,15 +26,48 @@
         <div class="card-header">
           <i class="fa fa-thermometer-half"></i> <?= $ppn ?></div>
         <div class="card-body">
+
+            <?php echo form_open('Waterlevel/site/'.$sitecode);?>
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <select class="form-control" id="timeRange" name="timeRange" >
+                        <?php foreach($timeRange as $key=>$rang){ 
+                            if($selectedtimeRange == $key){
+                                $selected = "selected";
+                            }else{
+                                $selected = "";
+                            }
+                        ?>
+                            <option value="<?php echo $key;?>" <?= $selected ?>><?php echo $rang;?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <div class="col-xs-6 col-md-3">
+                    <input type="text" id="datepicker1" name="datepicker1"  class="form-control" value="<?= $datepicker1 ?>" />
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <input type="text" id="datepicker2" name="datepicker2"  class="form-control" value="<?= $datepicker2 ?>" />
+                </div>
+
+                <div class="col-xs-6 col-md-3">
+                    <button type="submit" name="btsearch" class="btn btn-primary" value="Search" >Search</button>
+                </div>
+            </div>
+            <?php echo form_close();?>
+
             <div id="waterlevel" style="width: 100%; height: 400px; margin-bottom: 20px; margin-top: 20px;"></div>
+
         </div>
       </div>
      
 </div>
 <!-- /.container-fluid-->
 
+<!-- highchartsr -->
 <script src="<?=base_url()?>asset/vendor/Highcharts/code/highcharts.js"></script>
 <script src="<?=base_url()?>asset/vendor/Highcharts/code/modules/exporting.js"></script>
+
 
 <script type="text/javascript">
 
@@ -42,51 +75,59 @@
         chart: {
             zoomType: 'x'
         },
+        
         title: {
             text: ''
         },
        
         xAxis: {
-            type: 'datetime'
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                day: '%Y-%m-%d'
+            }
         },
+
         yAxis: {
             title: {
                 text: 'ม.รทก.'
-            }
+            },
+            <?php if($plotLines !=""){ echo $plotLines;} ?>
         },
+
         legend: {
             verticalAlign: 'top'
         },
-        plotOptions: {
-            area: {
-                fillColor: {
-                    linearGradient: {
-                        x1: 0,
-                        y1: 0,
-                        x2: 0,
-                        y2: 1
-                    },
-                    stops: [
-                        [0, Highcharts.getOptions().colors[0]],
-                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                    ]
-                },
-                marker: {
-                    radius: 2
-                },
-                lineWidth: 1,
-                states: {
-                    hover: {
-                        lineWidth: 1
-                    }
-                },
-                threshold: null
-            }
+        
+        tooltip: {
+            xDateFormat: '%Y-%m-%d %H:%M:%S',
+            headerFormat:'{point.key}<br/>',
+            pointFormat: '{series.name} : {point.y}'
         },
+        
 
         series: [<?= $series ?>]
 
 
     });//end chart waterlevel
+
+    $(function() {
+        $('#datepicker1').daterangepicker({
+            timePicker: true,
+            singleDatePicker: true,
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        });
+
+        $('#datepicker2').daterangepicker({
+            timePicker: true,
+            singleDatePicker: true,
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        });
+    });//end f.daterangepicker
+
+ 
 
 </script>
