@@ -56,6 +56,8 @@ class Waterlevel extends CI_Controller {
                                 <td>'.$cal_value[strtolower($siteUsds['location'])].'</td>
                                 </tr>';
                     
+                }else{
+                    $siteUsds = $siteUsds->row_array();
                 }
                 
                     $site_name= $rowdevice['sitecode']." ".$rowdevice['sitename'];
@@ -388,7 +390,19 @@ class Waterlevel extends CI_Controller {
             
             
 
-        }//end if
+        }else{
+            $data['sitecode'] = '';
+            $data['ppn'] = '';
+            $data['timeRange'] = ['900'=>'15 นาที', '3600'=>'1 ชั่วโมง', '10800'=>'3 ชั่วโมง'];
+            $data['datatable'] = '';
+            $data['series'] = '';
+            $data['datepicker1'] = date('Y-m-d H:i:s',strtotime(date('Y-m-d 06:00:00') . "- 1day"));
+            $data['datepicker2'] = date('Y-m-d 06:00:00');
+
+            $this->load->view('layout/header_view');
+            $this->load->view('waterlevel_view',$data);
+            $this->load->view('layout/footer_view');
+        }
 
     }// fn.site
 

@@ -111,8 +111,6 @@
     });//end chart waterlevel
 
 
-
-
      $(function() {
         $('#datepicker1').daterangepicker({
             timePicker: true,

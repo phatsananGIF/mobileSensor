@@ -138,7 +138,11 @@ class Communications extends CI_Controller {
                 $datasensor = ['sensor_label'=> $sensor_label, 'sensor_status'=>$label, 'sensor_color'=>$color, 'sensor_cal'=>number_format($value,2) ];
                 $sensorall[] = array_merge($site, $sitedata, $network_status, $datasensor);
 
-            }//end if
+            }else{
+                $sitedata = ['name_location'=>'', 'network_label'=>'', 'network_color'=>'', 'network_level'=>''];
+                $datasensor = ['sensor_label'=> '', 'sensor_status'=>'', 'sensor_color'=>'', 'sensor_cal'=>'', 'sensor_dt'=>''];
+                $sensorall[] = array_merge($site, $sitedata, $datasensor);
+            }
 
         }//end foreach site
 

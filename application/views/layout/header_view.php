@@ -36,10 +36,26 @@
 
 <?php 
 
-$query = (" SELECT * FROM ss_sites WHERE sitecode != 'PPN07' ORDER BY lined ASC "); 
+$query = (" SELECT * FROM ss_sites ORDER BY lined ASC "); 
 $querySite = $this->db->query($query);
 $querySite = $querySite->result_array();
 
+
+$querywl = ("SELECT ss_devices.id as devicesID, siteid, location, sensor, sitecode, sitename 
+          FROM ss_devices
+          LEFT JOIN ss_sites ON ss_devices.siteid=ss_sites.id
+          WHERE sensor='wl'GROUP BY sitecode HAVING sensor='wl'
+          ORDER BY ss_sites.lined ASC, ss_devices.location DESC"); 
+$querywl = $this->db->query($querywl);
+$querywl = $querywl->result_array();
+
+$queryrq = ("SELECT ss_devices.id as devicesID, siteid, location, sensor, sitecode, sitename 
+          FROM ss_devices
+          LEFT JOIN ss_sites ON ss_devices.siteid=ss_sites.id
+          WHERE sensor='rq'GROUP BY sitecode HAVING sensor='rq'
+          ORDER BY ss_sites.lined ASC, ss_devices.location DESC"); 
+$queryrq = $this->db->query($queryrq);
+$queryrq = $queryrq->result_array();
 
 ?>
 
@@ -72,7 +88,7 @@ $querySite = $querySite->result_array();
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
 
-          <?php foreach($querySite as $site){ ?>
+          <?php foreach($querywl as $site){ ?>
             <li>
               <a href="<?=site_url()?>waterlevel/site/<?=$site['sitecode']?>"><?=$site['sitecode']." ".$site['sitename']?></a>
             </li>
@@ -100,7 +116,7 @@ $querySite = $querySite->result_array();
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents3">
 
-          <?php foreach($querySite as $site){ ?>
+          <?php foreach($queryrq as $site){ ?>
             <li>
               <a href="<?=site_url()?>rainfall/site/<?=$site['sitecode']?>"><?=$site['sitecode']." ".$site['sitename']?></a>
             </li>
@@ -115,6 +131,14 @@ $querySite = $querySite->result_array();
             <span class="nav-link-text">ภาพนิ่ง</span>
           </a>
         </li>
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="ภาพนิ่งเคลื่อนไหว">
+          <a class="nav-link" href="<?=site_url()?>videoview">
+            <i class="fa fa-fw fa-video-camera"></i>
+            <span class="nav-link-text">ภาพนิ่งเคลื่อนไหว</span>
+          </a>
+        </li>
+
       </ul>
       <ul class="navbar-nav sidenav-toggler">
         <li class="nav-item">

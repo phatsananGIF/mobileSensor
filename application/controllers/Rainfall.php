@@ -50,62 +50,62 @@ class Rainfall extends CI_Controller {
                             <td>ปริมาณน้ำฝน (มม.)</td>
                             <td>'.number_format($sitelastinfo['sensor_value'],2).'</td>
                             </tr>';
-            }
-
-
-            //query day
-            $queryday = ("SELECT sum(sensor_value)/4 as sensor_value, max(sensor_dt)
-                        FROM `ss_sensor` WHERE siteid = '$sitecode' and location = '".$sitesdevice['location']."'
-                        and sensor_type = '".$sitesdevice['sensor']."' and ipaddress = '".$sitesdevice['ipaddress']."' and
-                        sensor_dt between '$startday' and '$endday' ");
-            $siteday = $this->db->query($queryday);
             
-            if($siteday->num_rows()!=0){
-                $siteday = $siteday->row_array();
+
+
+                //query day
+                $queryday = ("SELECT sum(sensor_value)/4 as sensor_value, max(sensor_dt)
+                            FROM `ss_sensor` WHERE siteid = '$sitecode' and location = '".$sitesdevice['location']."'
+                            and sensor_type = '".$sitesdevice['sensor']."' and ipaddress = '".$sitesdevice['ipaddress']."' and
+                            sensor_dt between '$startday' and '$endday' ");
+                $siteday = $this->db->query($queryday);
+                
+                if($siteday->num_rows()!=0){
+                    $siteday = $siteday->row_array();
+
+                    $datatable.='<tr>
+                                <td>ฝนสะสมวันนี้ (6:00 - ปัจจุบัน)</td>
+                                <td>'.number_format($siteday['sensor_value'],2).'</td>
+                                </tr>';
+                }
+
+
+                //query date
+                $querydate = ("SELECT sum(sensor_value)/4 as sensor_value, max(sensor_dt)
+                            FROM `ss_sensor` WHERE siteid = '$sitecode' and location = '".$sitesdevice['location']."'
+                            and sensor_type = '".$sitesdevice['sensor']."' and ipaddress = '".$sitesdevice['ipaddress']."' and
+                            sensor_dt between '$startdate' and '$enddate' ");
+                $sitedate = $this->db->query($querydate);
+                
+                if($sitedate->num_rows()!=0){
+                    $sitedate = $sitedate->row_array();
+
+                    $datatable.='<tr>
+                                <td>ฝนรายวัน (6:00 - 6:00)</td>
+                                <td>'.number_format($sitedate['sensor_value'],2).'</td>
+                                </tr>';
+                }
+
+            /*
+                print_r($this->db->last_query());
+
+                echo '<pre>';
+                print_r($sitedate);
+                echo  '</pre>';
+                */
+        
+                if( date_format( date_create($sitelastinfo['sensor_dt']) ,"Y-m-d") != date('Y-m-d') ){
+                    $date_time='<font color="red">'.$sitelastinfo['sensor_dt'].'</font>';
+                }else{
+                    $date_time=$sitelastinfo['sensor_dt'];
+                }
+
 
                 $datatable.='<tr>
-                            <td>ฝนสะสมวันนี้ (6:00 - ปัจจุบัน)</td>
-                            <td>'.number_format($siteday['sensor_value'],2).'</td>
-                            </tr>';
+                        <td>วัน/เวลา</td>
+                        <td>'.$date_time.'</td>
+                        </tr>';
             }
-
-
-            //query date
-            $querydate = ("SELECT sum(sensor_value)/4 as sensor_value, max(sensor_dt)
-                        FROM `ss_sensor` WHERE siteid = '$sitecode' and location = '".$sitesdevice['location']."'
-                        and sensor_type = '".$sitesdevice['sensor']."' and ipaddress = '".$sitesdevice['ipaddress']."' and
-                        sensor_dt between '$startdate' and '$enddate' ");
-            $sitedate = $this->db->query($querydate);
-            
-            if($sitedate->num_rows()!=0){
-                $sitedate = $sitedate->row_array();
-
-                $datatable.='<tr>
-                            <td>ฝนรายวัน (6:00 - 6:00)</td>
-                            <td>'.number_format($sitedate['sensor_value'],2).'</td>
-                            </tr>';
-            }
-
-           /*
-            print_r($this->db->last_query());
-
-            echo '<pre>';
-            print_r($sitedate);
-            echo  '</pre>';
-            */
-    
-            if( date_format( date_create($sitelastinfo['sensor_dt']) ,"Y-m-d") != date('Y-m-d') ){
-                $date_time='<font color="red">'.$sitelastinfo['sensor_dt'].'</font>';
-            }else{
-                $date_time=$sitelastinfo['sensor_dt'];
-            }
-
-
-            $datatable.='<tr>
-                    <td>วัน/เวลา</td>
-                    <td>'.$date_time.'</td>
-                    </tr>';
-
 
 
             //query rq ย้อนหลัง 1 วัน เอาไว้ทำกราฟ
@@ -179,7 +179,20 @@ class Rainfall extends CI_Controller {
             
             
     
-        }//end if
+        }else{
+            $data['sitecode'] = '';
+            $data['ppn'] = '';
+            $data['timeRange'] = ['900'=>'15 นาที', '3600'=>'1 ชั่วโมง', '10800'=>'3 ชั่วโมง'];
+            $data['datatable'] = '';
+            $data['series'] = '';
+            $data['datepicker1'] = date('Y-m-d H:i:s',strtotime(date('Y-m-d 06:00:00') . "- 1day"));
+            $data['datepicker2'] = date('Y-m-d 06:00:00');
+
+
+            $this->load->view('layout/header_view');
+            $this->load->view('rainfall_view',$data);
+            $this->load->view('layout/footer_view');
+        }
         
 
     }// fn.site

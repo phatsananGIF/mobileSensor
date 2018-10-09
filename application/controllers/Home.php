@@ -18,7 +18,19 @@ class Home extends CI_Controller {
             'PPN05US'=>'#999966',
             'PPN05DS'=>'#007f7f',
             'PPN06US'=>'#5656ff',
-            'PPN06DS'=>'#660033'
+            'PPN06DS'=>'#660033',
+            'PPN07US'=>'#008000',
+            'PPN07DS'=>'#00cccc',
+            'PPN08US'=>'#999900',
+            'PPN08DS'=>'#662900',
+            'PPN09US'=>'#ff99b3',
+            'PPN09DS'=>'#990066',
+            'PPN10US'=>'#adad85',
+            'PPN10DS'=>'#00e6ac',
+            'PPN11US'=>'#ccccff',
+            'PPN11DS'=>'#ff4d4d',
+            'PPN12US'=>'#ace600',
+            'PPN12DS'=>'#e60000',
         );
 
         $typeWL=array(
@@ -28,7 +40,19 @@ class Home extends CI_Controller {
             'PPN04US'=>'ระดับน้ำ',
             'PPN05US'=>'ระดับน้ำ',
             'PPN06US'=>'ระดับเหนือน้ำ',
-            'PPN06DS'=>'ระดับท้ายน้ำ'
+            'PPN06DS'=>'ระดับท้ายน้ำ',
+            'PPN07US'=>'ระดับเหนือน้ำ',
+            'PPN07DS'=>'ระดับท้ายน้ำ',
+            'PPN08US'=>'ระดับเหนือน้ำ',
+            'PPN08DS'=>'ระดับท้ายน้ำ',
+            'PPN09US'=>'ระดับเหนือน้ำ',
+            'PPN09DS'=>'ระดับท้ายน้ำ',
+            'PPN10US'=>'ระดับเหนือน้ำ',
+            'PPN10DS'=>'ระดับท้ายน้ำ',
+            'PPN11US'=>'ระดับเหนือน้ำ',
+            'PPN11DS'=>'ระดับท้ายน้ำ',
+            'PPN12US'=>'ระดับเหนือน้ำ',
+            'PPN12DS'=>'ระดับท้ายน้ำ'
         );
 
         $date_start = date('Y-04-d H:i:s',strtotime(date('Y-04-d 00:00:00') . "- 7day"));	
@@ -77,6 +101,14 @@ class Home extends CI_Controller {
                     data: [".$val."]
                 },";
 
+            }else{
+                $mydate = getdate(strtotime($date_end));
+                $dt= "Date.UTC($mydate[year], $mydate[mon]-1, $mydate[mday])";
+                $seriesWL.="{
+                    name: '".$typeWL[$sitewl['sitecode'].strtoupper($sitewl['location'])]." ".$sitewl['sitecode']." ".$sitewl['sitename']."',
+                    color: '".$colorsite[$sitewl['sitecode'].strtoupper($sitewl['location'])]."',
+                    data: [[".$dt.",0]]
+                },";
             }
 
 
@@ -130,6 +162,15 @@ class Home extends CI_Controller {
                     name: '".$siteRQ['sitecode']." ".$siteRQ['sitename']."',
                     color: '".$colorsite[$siteRQ['sitecode']."US"]."',
                     data: [".$val."]
+                },";
+
+            }else{
+                $mydate = getdate(strtotime($date_end));
+                $dt= "Date.UTC($mydate[year], $mydate[mon]-1, $mydate[mday])";
+                $seriesRQ.="{
+                    name: '".$siteRQ['sitecode']." ".$siteRQ['sitename']."',
+                    color: '".$colorsite[$siteRQ['sitecode']."US"]."',
+                    data: [[".$dt.",0]]
                 },";
 
             }
