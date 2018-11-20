@@ -127,11 +127,15 @@ class Rainfall extends CI_Controller {
                $date_end = $endday;
             }
 
-            $queryRQ = (" SELECT * ,(sum(sensor_value) / 4) AS sum_value ,
-                        from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) AS `dt`
-                        from `ss_sensor` where siteid = '$sitecode'  and sensor_type = '".$sitesdevice['sensor']."'and location='".$sitesdevice['location']."' and 
-                        from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) between  '$date_start' and '$date_end' 
-                        group by (unix_timestamp(`sensor_dt`) DIV $step),`siteid`,`location`,`sensor_type`  ORDER BY `dt` asc  ");
+            $queryRQ = (" SELECT * from (
+                            SELECT * ,(sum(sensor_value) / 4) AS sum_value ,
+                            from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) AS `dt`
+                            from `ss_sensor` where siteid = '$sitecode'  and sensor_type = '".$sitesdevice['sensor']."'
+                            and location='".$sitesdevice['location']."'
+                            and sensor_dt >= '$date_start' and sensor_dt <= '$date_end'
+                            group by (unix_timestamp(`sensor_dt`) DIV $step),`siteid`,`location`,`sensor_type`  ORDER BY `dt` asc  
+                        ) vv where  vv.dt >= '$date_start' and dt<= '$date_end'
+                        ");
 
             $siteRQ = $this->db->query($queryRQ);
             $siteRQ = $siteRQ->result_array();

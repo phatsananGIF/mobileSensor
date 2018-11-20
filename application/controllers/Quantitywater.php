@@ -12,7 +12,7 @@ class Quantitywater extends CI_Controller {
 
     public function site($sitecode){
 
-        echo $sitecode;
+        //echo $sitecode;
 
         //query device
         $querydevice = ("SELECT ss_devices.id as devicesID, location, sensor, input_value, sitecode, sitename

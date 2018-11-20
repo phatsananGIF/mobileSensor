@@ -82,11 +82,15 @@ class Waterlevel extends CI_Controller {
                    $enddate = $siteUsds['sensor_dt'];
                 }
 
-                $querydateUsds = (" SELECT * ,( avg(`sensor_value`) + avg(offset)) AS `cal_value`,
-                            from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) AS `dt`
-                            from `ss_sensor` where siteid = '".$rowdevice['sitecode']."'  and sensor_type = '".$rowdevice['sensor']."' and location='".$rowdevice['location']."' and 
-                            from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) between '$startdate' and '$enddate'  
-                            group by (unix_timestamp(`sensor_dt`) DIV $step),`siteid`,`location`,`sensor_type`  ORDER BY `dt` asc  ");
+                $querydateUsds = (" SELECT * from (
+                                    SELECT * ,( avg(`sensor_value`) + avg(offset)) AS `cal_value`,
+                                    from_unixtime((unix_timestamp(`sensor_dt`) - (unix_timestamp(`sensor_dt`) % $step))) AS `dt`
+                                    from `ss_sensor` where siteid = '".$rowdevice['sitecode']."'  and sensor_type = '".$rowdevice['sensor']."' 
+                                    and location='".$rowdevice['location']."'
+                                    and sensor_dt >= '$startdate' and sensor_dt <= '$enddate' 
+                                    group by (unix_timestamp(`sensor_dt`) DIV $step),`siteid`,`location`,`sensor_type`  ORDER BY `dt` asc
+                                ) vv where  vv.dt >= '$startdate' and dt<= '$enddate'
+                            ");
 
                 $sitedateUsds = $this->db->query($querydateUsds);
                 $sitedateUsds = $sitedateUsds->result_array();

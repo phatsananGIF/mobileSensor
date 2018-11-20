@@ -86,7 +86,7 @@ class Model_alarm extends CI_Model {
         
 
 
-    }//fn.runcal
+    }//fn.alarm_level
     
 
 
