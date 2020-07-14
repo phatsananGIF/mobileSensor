@@ -22,6 +22,8 @@ class Quality_water extends CI_Controller {
         $val_avgEC="";
         $val_avgTem="";
 
+        $ppn="";
+
         //query wq last
         $querydevice = ("SELECT site, do, ph, ec, tm, sitename, sensor_dt
                             FROM ss_wq LEFT JOIN ss_sites ON ss_wq.site=ss_sites.sitecode WHERE site='$sitecode'
